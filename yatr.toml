@@ -1,0 +1,62 @@
+# yatr - https://github.com/cargopete/yatr
+#
+# Task names are the same across every nightswatchhq repo, so `yatr ci` means
+# the same thing wherever you are. Note that `ci` is deliberately not called
+# `check`: `yatr check` is a builtin that validates this file, and it shadows
+# any task of that name without warning.
+
+# A Claude Code plugin: a manifest and skill markdown. Nothing compiles, so the
+# tasks are the things that break a plugin silently at install time.
+
+[settings]
+cache = true
+
+# Not cached: yatr's source hashing walks the tree with hidden entries
+# skipped, so a `sources` glob under a dot-directory matches nothing and the
+# task neither invalidates nor keys uniquely. See cargopete/yatr.
+[tasks.manifest]
+desc = "Fail if .claude-plugin/plugin.json is not valid JSON"
+run = ["python3 -m json.tool .claude-plugin/plugin.json"]
+no_cache = true
+
+[tasks.frontmatter]
+desc = "Fail if any SKILL.md is missing its name/description frontmatter"
+shell = true
+sources = ["skills/**/SKILL.md"]
+run = ['''
+bad=0
+for f in $(git ls-files 'skills/*/SKILL.md'); do
+  head -1 "$f" | grep -q '^---$' || { echo "$f: no frontmatter fence"; bad=$((bad+1)); continue; }
+  sed -n '2,/^---$/p' "$f" | grep -q '^name:' || { echo "$f: no name:"; bad=$((bad+1)); }
+  sed -n '2,/^---$/p' "$f" | grep -q '^description:' || { echo "$f: no description:"; bad=$((bad+1)); }
+done
+if [ "$bad" -ne 0 ]; then echo "$bad SKILL.md problem(s)"; exit 1; fi
+echo "every SKILL.md has name and description"
+''']
+
+[tasks.assets]
+desc = "shellcheck the hardening script shipped with the skill"
+run = ["shellcheck skills/deploy-gateway/assets/harden.sh"]
+sources = ["skills/**/assets/*.sh"]
+
+[tasks.links]
+desc = "Fail if a relative markdown link points at a file that is not there"
+shell = true
+sources = ["**/*.md"]
+run = ['''
+missing=0
+for f in $(git ls-files '*.md'); do
+  d=$(dirname "$f")
+  for l in $(grep -oE '\]\([^)]+\)' "$f" | sed 's/^](//;s/)$//' | grep -vE '^(https?:|mailto:|#|<)' | sed 's/#.*$//'); do
+    [ -z "$l" ] && continue
+    if [ ! -e "$d/$l" ]; then echo "broken: $f -> $l"; missing=$((missing+1)); fi
+  done
+done
+if [ "$missing" -ne 0 ]; then echo "$missing broken relative link(s)"; exit 1; fi
+echo "all relative markdown links resolve"
+''']
+
+[tasks.ci]
+desc = "What CI runs: manifest, frontmatter, assets, links"
+depends = ["manifest", "frontmatter", "assets", "links"]
+run = []
