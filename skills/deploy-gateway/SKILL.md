@@ -1,12 +1,12 @@
 ---
 name: deploy-gateway
-description: Deploy and validate a Graph Horizon subgraph gateway with gib (github.com/nightswatchhq/gib). Use when the user wants to stand up / deploy / launch a Graph gateway, a gib gateway, a self-hosted subgraph gateway on Arbitrum One, run their own query gateway, or asks to "deploy gib". This is the concierge: it interviews, hardens the box, deploys gib at its pinned release, and validates the payment path end-to-end with `gib smoke` — it does NOT reimplement gib's mechanics.
+description: Deploy and validate a Graph Horizon subgraph gateway with gib (github.com/nuthatch-org/gib). Use when the user wants to stand up / deploy / launch a Graph gateway, a gib gateway, a self-hosted subgraph gateway on Arbitrum One, run their own query gateway, or asks to "deploy gib". This is the concierge: it interviews, hardens the box, deploys gib at its pinned release, and validates the payment path end-to-end with `gib smoke` — it does NOT reimplement gib's mechanics.
 ---
 
 # Deploy a gib gateway
 
 You are the concierge for standing up a Graph Horizon subgraph gateway. The mechanics live in
-[gib](https://github.com/nightswatchhq/gib) — its `scripts/` and `docker compose` do the work.
+[gib](https://github.com/nuthatch-org/gib) — its `scripts/` and `docker compose` do the work.
 **Your job is judgment**: interview the operator, harden the box if it's shared, drive gib's own
 scripts to deploy, then run `gib smoke` and *interpret* it. You do not generate or hand-roll the
 stack.
@@ -78,8 +78,8 @@ answers. Resolve the tag robustly — `git ls-remote --tags | tail` returns the 
 ref `vX.Y.Z^{}`, which is **not** cloneable; use `--refs` (or `gh release view`):
 
 ```bash
-TAG=$(git ls-remote --tags --refs https://github.com/nightswatchhq/gib 'v*' | sed 's#.*/##' | sort -V | tail -1)
-git clone --branch "$TAG" https://github.com/nightswatchhq/gib && cd gib   # detached HEAD at the tag — expected
+TAG=$(git ls-remote --tags --refs https://github.com/nuthatch-org/gib 'v*' | sed 's#.*/##' | sort -V | tail -1)
+git clone --branch "$TAG" https://github.com/nuthatch-org/gib && cd gib   # detached HEAD at the tag — expected
 cp .env.example .env
 ```
 
@@ -142,7 +142,7 @@ Tell the operator, plainly:
   Up to a *verified signed RAV*.
 - **What remains — and is cooperation/money-dependent, not a gib gap:** funding escrow, and
   getting indexers to whitelist their sender. Link gib's onboarding section
-  ([Getting indexers to accept your gateway](https://github.com/nightswatchhq/gib#getting-indexers-to-accept-your-gateway))
+  ([Getting indexers to accept your gateway](https://github.com/nuthatch-org/gib#getting-indexers-to-accept-your-gateway))
   and, for Stage 2, gib `docs/02-onchain-escrow.md`. **No payment has flowed; no paid query has
   returned data** (a 402 is expected until onboarding). Do not imply otherwise.
 - **Where the keys live:** `secrets/{sender,signer}.txt` on the box, mode 600, gitignored — never
