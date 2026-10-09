@@ -1,10 +1,10 @@
 # gib-skill
 
-> Sibling to [lodestone](https://github.com/nightswatchhq/lodestone): lodestone *forges* Graph
+> Sibling to [lodestone](https://github.com/nuthatch-org/lodestone): lodestone *forges* Graph
 > Horizon data services; this *deploys* the gateways.
 
 A Claude Code plugin — the **concierge for standing up a Graph Horizon subgraph gateway**. It sits
-on top of [gib](https://github.com/nightswatchhq/gib) (which stays closed and neutral) and adds the
+on top of [gib](https://github.com/nuthatch-org/gib) (which stays closed and neutral) and adds the
 judgment gib's scripts can't: it interviews you, hardens the box if it's shared, deploys gib at its
 pinned release, and validates the whole payment path end-to-end with `gib smoke` — then hands off
 with exactly what's proven and what still needs escrow and indexer onboarding.
@@ -70,7 +70,7 @@ skills/deploy-gateway/
 ## Install
 
 ```
-/plugin marketplace add nightswatchhq/gib-skill
+/plugin marketplace add nuthatch-org/gib-skill
 /plugin install gib-skill
 ```
 

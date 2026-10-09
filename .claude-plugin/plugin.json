@@ -1,11 +1,11 @@
 {
   "name": "gib-skill",
   "version": "0.1.0",
-  "description": "The concierge for standing up a Graph Horizon subgraph gateway. Interviews you, hardens the box, deploys github.com/nightswatchhq/gib at its pinned release, and validates the payment path end-to-end with gib smoke — then hands off with what's proven and what remains. Judgment and interview layer on top of gib's own scripts; not a generator.",
+  "description": "The concierge for standing up a Graph Horizon subgraph gateway. Interviews you, hardens the box, deploys github.com/nuthatch-org/gib at its pinned release, and validates the payment path end-to-end with gib smoke — then hands off with what's proven and what remains. Judgment and interview layer on top of gib's own scripts; not a generator.",
   "author": {
-    "name": "nightswatchhq"
+    "name": "nuthatch-org"
   },
-  "homepage": "https://github.com/nightswatchhq/gib-skill",
+  "homepage": "https://github.com/nuthatch-org/gib-skill",
   "license": "Apache-2.0",
   "keywords": [
     "the-graph",
